@@ -866,8 +866,18 @@
       font-weight: 500;
     }
 
+    .rear-film-row {
+      display: flex;
+      gap: 20px;
+      align-items: flex-end;
+    }
+    .rear-film-row .field {
+      flex: 1;
+      margin-bottom: 0;
+    }
     .film-valkyrie-warning {
-      margin: 10px 0 0;
+      flex: 1;
+      margin: 0;
       padding: 10px 13px;
       background: oklch(97% 0.025 70);
       border-left: 3px solid oklch(62% 0.14 58);
@@ -1763,6 +1773,8 @@
       .grid-2 { grid-template-columns: 1fr; gap: 0; }
       .field.full { grid-column: auto; }
       .field { margin-bottom: 18px; }
+      .rear-film-row { flex-direction: column; align-items: stretch; gap: 12px; }
+      .rear-film-row .field { margin-bottom: 0; }
       label { font-size: 13.5px; line-height: 1.48; }
       .service-center-search {
         padding: 13px;
@@ -2141,24 +2153,27 @@
                 </select>
               </div>
 
-              <div class="field is-disabled" id="rearFilmField">
-                <label for="rearFilm">후면 유리 필름 및 농도를 선택하여 주세요.</label>
-                <select id="rearFilm" name="rearFilm" disabled>
-                  <option value="" selected>선택하신 차량은 후면 유리가 없습니다.</option>
-                  <option>발키리 15% । 업그레이드 필름</option>
-                  <option>발키리 30% । 업그레이드 필름</option>
-                  <option>벨벳 5% । 업그레이드 필름</option>
-                  <option>벨벳 15% । 업그레이드 필름</option>
-                  <option>벨벳 30% । 업그레이드 필름</option>
-                  <option>벨벳 40% । 업그레이드 필름</option>
-                  <option>볼티지 5% । 기본 필름</option>
-                  <option>볼티지 15% । 기본 필름</option>
-                  <option>볼티지 35% । 기본 필름</option>
-                  <option>볼티지 45% । 기본 필름</option>
-                </select>
+              <div class="field full">
+                <div class="rear-film-row">
+                  <div class="field is-disabled" id="rearFilmField">
+                    <label for="rearFilm">후면 유리 필름 및 농도를 선택하여 주세요.</label>
+                    <select id="rearFilm" name="rearFilm" disabled>
+                      <option value="" selected>선택하신 차량은 후면 유리가 없습니다.</option>
+                      <option>발키리 15% । 업그레이드 필름</option>
+                      <option>발키리 30% । 업그레이드 필름</option>
+                      <option>벨벳 5% । 업그레이드 필름</option>
+                      <option>벨벳 15% । 업그레이드 필름</option>
+                      <option>벨벳 30% । 업그레이드 필름</option>
+                      <option>벨벳 40% । 업그레이드 필름</option>
+                      <option>볼티지 5% । 기본 필름</option>
+                      <option>볼티지 15% । 기본 필름</option>
+                      <option>볼티지 35% । 기본 필름</option>
+                      <option>볼티지 45% । 기본 필름</option>
+                    </select>
+                  </div>
+                  <p class="film-valkyrie-warning" id="valkyrieWarning">반사필름의 특성상 일부 환경에서는 수신율 저하가 발생할 수 있습니다.</p>
+                </div>
               </div>
-
-              <p class="film-valkyrie-warning" id="valkyrieWarning">반사필름의 특성상 일부 환경에서는 수신율 저하가 발생할 수 있습니다.</p>
 
               <div class="field full">
                 <div class="check-row">
