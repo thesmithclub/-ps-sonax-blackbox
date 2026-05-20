@@ -2233,17 +2233,22 @@
                 <textarea id="memo" name="memo" placeholder="기타 문의사항을 입력하여 주세요."></textarea>
                 <div class="price-estimate" id="priceEstimate" aria-live="polite">
                   <div class="price-estimate-head">
-                    <span class="price-estimate-label">예상가격</span>
+                    <span class="price-estimate-label">결제금</span>
                     <strong class="price-estimate-total" id="priceEstimateTotal">0원</strong>
                   </div>
                   <div class="price-estimate-deposit">
                     <span class="price-estimate-deposit-label">예약금</span>
                     <strong class="price-estimate-deposit-value" id="reservationDepositAmount">0원</strong>
                   </div>
+                  <div class="price-estimate-deposit">
+                    <span class="price-estimate-deposit-label">시공점 결제금</span>
+                    <strong class="price-estimate-deposit-value" id="serviceCenterPaymentAmount">0원</strong>
+                  </div>
                   <ul class="price-estimate-list" id="priceEstimateList"></ul>
-                  <p class="price-estimate-note" id="priceEstimateNote">예약금은 예상가격에 합산되지 않으며, 잔여 비용은 대리점에서 결제가 진행됩니다.</p>
+                  <p class="price-estimate-note" id="priceEstimateNote">예약금은 결제 링크에서, 시공점 결제금은 시공점에서 별도로 결제가 진행됩니다.</p>
                   <input id="estimatedTotal" name="estimatedTotal" type="hidden" value="0">
                   <input id="reservationDeposit" name="reservationDeposit" type="hidden" value="0">
+                  <input id="serviceCenterPayment" name="serviceCenterPayment" type="hidden" value="0">
                   <input id="naverPayRequired" name="naverPayRequired" type="hidden" value="불필요">
                 </div>
               </div>
@@ -2393,8 +2398,10 @@
     const priceEstimateList = document.getElementById('priceEstimateList');
     const priceEstimateNote = document.getElementById('priceEstimateNote');
     const reservationDepositAmount = document.getElementById('reservationDepositAmount');
+    const serviceCenterPaymentAmount = document.getElementById('serviceCenterPaymentAmount');
     const estimatedTotalInput = document.getElementById('estimatedTotal');
     const reservationDepositInput = document.getElementById('reservationDeposit');
+    const serviceCenterPaymentInput = document.getElementById('serviceCenterPayment');
     const naverPayRequiredInput = document.getElementById('naverPayRequired');
     const blackboxInput = document.getElementById('blackbox');
     const blackboxChannelInput = document.getElementById('blackboxChannel');
@@ -2456,8 +2463,7 @@
       { source: 'deliveryDateTime', date: 'deliveryDate', time: 'deliveryTime' },
       { source: 'centerInDateTime', date: 'centerInDate', time: 'centerInTime' }
     ];
-    const DEFAULT_RESERVATION_DEPOSIT = 50000;
-    const REDUCED_RESERVATION_DEPOSIT = 30000;
+    const PRICE_UNIT = 10000;
 
     function getServiceCenterOptions() {
       return serviceCenterOptions.slice();
@@ -2669,6 +2675,10 @@
       return `${value.toLocaleString('ko-KR')}원`;
     }
 
+    function manWon(value) {
+      return value * PRICE_UNIT;
+    }
+
     function getFilmGrade(value) {
       if (!value || value.includes('선택하지 않음')) return '';
       if (value.includes('발키리')) return 'valkyrie';
@@ -2690,16 +2700,19 @@
     };
 
     const frontSidePriceTable = {
-      'voltage/voltage': null,
-      'velvet/voltage': { label: '전면 벨벳 업그레이드', amount: 200000 },
-      'voltage/velvet': { label: '측면 벨벳 업그레이드', amount: 300000 },
-      'velvet/velvet': { label: '전·측면 벨벳 업그레이드', amount: 500000 },
-      'valkyrie/voltage': { label: '전면 발키리 업그레이드', amount: 250000 },
-      'voltage/valkyrie': { label: '측면 발키리 업그레이드', amount: 450000 },
-      'valkyrie/velvet': { label: '전면 발키리 + 측면 벨벳 업그레이드', amount: 600000 },
-      'velvet/valkyrie': { label: '전면 벨벳 + 측면 발키리 업그레이드', amount: 650000 },
-      'valkyrie/valkyrie': { label: '전·측면 발키리 업그레이드', amount: 700000 }
+      'voltage/voltage': { label: '전·측면 볼티지 기본작업', amountMan: 0, depositMan: 0, hipassMan: 2, roofVoltageMan: 25, roofVelvetMan: 30 },
+      'velvet/voltage': { label: '전면 벨벳 업그레이드', amountMan: 20, depositMan: 3, hipassMan: 2, roofVoltageMan: 25, roofVelvetMan: 30 },
+      'valkyrie/voltage': { label: '전면 발키리 업그레이드', amountMan: 25, depositMan: 3, hipassMan: 2, roofVoltageMan: 25, roofVelvetMan: 30 },
+      'velvet/velvet': { label: '전·측면 벨벳 업그레이드', amountMan: 50, depositMan: 5, hipassMan: 0, roofVoltageMan: 25, roofVelvetMan: 25 },
+      'valkyrie/valkyrie': { label: '전·측면 발키리 업그레이드', amountMan: 70, depositMan: 5, hipassMan: 0, roofVoltageMan: 25, roofVelvetMan: 15 },
+      'valkyrie/velvet': { label: '전면 발키리 + 측면 벨벳 업그레이드', amountMan: 60, depositMan: 5, hipassMan: 0, roofVoltageMan: 25, roofVelvetMan: 30 }
     };
+
+    function getFrontSidePriceKey(front, side) {
+      if (front === 'voltage' && side !== 'voltage') return `${side}/voltage`;
+      if (front === 'velvet' && side === 'valkyrie') return 'valkyrie/velvet';
+      return `${front}/${side}`;
+    }
 
     function getSideFilmGrade() {
       return ['sideOneFilm', 'sideTwoFilm']
@@ -2716,15 +2729,28 @@
     function getFrontSideEstimate() {
       const front = getFilmGrade(getSelectedOptionText('frontFilm')) || 'voltage';
       const side = getSideFilmGrade();
+      const priceKey = getFrontSidePriceKey(front, side);
+      const estimate = frontSidePriceTable[priceKey];
 
-      const estimate = frontSidePriceTable[`${front}/${side}`];
-      return estimate ? { ...estimate, frontGrade: front, sideGrade: side } : null;
+      if (!estimate) {
+        return { invalid: true, message: '금액표에 없는 전면·측면 필름 조합입니다.' };
+      }
+
+      return {
+        ...estimate,
+        priceKey,
+        amount: manWon(estimate.amountMan),
+        deposit: manWon(estimate.depositMan),
+        frontGrade: front,
+        sideGrade: side
+      };
     }
 
-    function getRoofEstimate() {
+    function getRoofEstimate(frontSide) {
       const roof = getFilmGrade(getSelectedOptionText('glassRoofFilm'));
-      if (roof === 'voltage') return { label: '글라스루프 볼티지', amount: 250000 };
-      if (roof === 'velvet') return { label: '글라스루프 벨벳', amount: 300000 };
+      if (!frontSide || frontSide.invalid) return null;
+      if (roof === 'voltage') return { label: '글라스루프 볼티지', amount: manWon(frontSide.roofVoltageMan) };
+      if (roof === 'velvet') return { label: '글라스루프 벨벳', amount: manWon(frontSide.roofVelvetMan) };
       return null;
     }
 
@@ -2780,39 +2806,22 @@
     function getBlackboxEstimate() {
       if (!blackboxInput || !blackboxInput.checked) return null;
       const channel = blackboxChannelInput ? blackboxChannelInput.value : '';
-      if (channel === '1ch') return { label: '블랙박스 1채널', amount: 180000 };
-      if (channel === '2ch') return { label: '블랙박스 2채널', amount: 250000 };
+      if (channel === '1ch') return { label: '블랙박스 1채널', amount: manWon(18) };
+      if (channel === '2ch') return { label: '블랙박스 2채널', amount: manWon(25) };
       return { invalid: true, message: '블랙박스 채널을 선택해 주세요.' };
     }
 
-    function isReservationPaymentRequired(isInvalid = false) {
-      return getReservationDepositAmount(isInvalid) > 0;
-    }
+    function getReservationDeposit(frontSide, hasRoof, hasBlackbox, isInvalid = false) {
+      if (isInvalid || !frontSide || frontSide.invalid) return 0;
 
-    function hasBaseReservationDepositOption() {
-      const side = getSideFilmGrade();
-      const rear = rearFilmInput && !rearFilmInput.disabled ? getFilmGrade(rearFilmInput.value) : '';
-      const ppf = document.getElementById('ppf');
-      const hipass = document.getElementById('hipass');
-      const hasSideOrRearUpgrade = [side, rear].some((grade) => grade && grade !== 'voltage');
-      return hasSideOrRearUpgrade || Boolean(ppf && ppf.checked) || Boolean(hipass && hipass.checked);
-    }
+      let depositMan = frontSide.depositMan;
+      if (hasRoof && hasBlackbox) {
+        depositMan += frontSide.depositMan >= 5 ? 3 : 5;
+      } else if ((hasRoof || hasBlackbox) && frontSide.depositMan < 5) {
+        depositMan += 3;
+      }
 
-    function getAdditionalReservationDepositCount() {
-      const front = getFilmGrade(getSelectedOptionText('frontFilm')) || 'voltage';
-      const roof = getFilmGrade(getSelectedOptionText('glassRoofFilm'));
-      return [
-        front !== 'voltage',
-        Boolean(roof),
-        Boolean(blackboxInput && blackboxInput.checked)
-      ].filter(Boolean).length;
-    }
-
-    function getReservationDepositAmount(isInvalid = false) {
-      if (isInvalid) return 0;
-      const baseDeposit = hasBaseReservationDepositOption() ? DEFAULT_RESERVATION_DEPOSIT : 0;
-      const additionalDeposit = getAdditionalReservationDepositCount() * REDUCED_RESERVATION_DEPOSIT;
-      return baseDeposit + additionalDeposit;
+      return manWon(depositMan);
     }
 
     function calculatePriceEstimate() {
@@ -2822,76 +2831,69 @@
       if (vehicleModel !== '폴스타4') {
         return {
           total: 0,
+          reservationDeposit: 0,
+          serviceCenterPayment: 0,
           items: [`${vehicleModel} 가격표는 준비중입니다. 폴스타4 선택 시 가격표 기준 예상가가 표시됩니다.`],
           naverPayRequired: null
         };
       }
 
       const frontSide = getFrontSideEstimate();
-      const roof = getRoofEstimate();
-      let filmTotal = 0;
+      const roof = getRoofEstimate(frontSide);
 
       if (frontSide && frontSide.invalid) {
         return {
           total: 0,
+          reservationDeposit: 0,
+          serviceCenterPayment: 0,
           items: [frontSide.message],
           invalid: true,
           naverPayRequired: null
         };
       }
 
-      const roofGrade = getFilmGrade(getSelectedOptionText('glassRoofFilm'));
-      const isVelvetVelvetRoofVelvet = frontSide && frontSide.frontGrade === 'velvet' && frontSide.sideGrade === 'velvet' && roofGrade === 'velvet';
-      const isValkyrieValkyrieRoofVelvet = frontSide && frontSide.frontGrade === 'valkyrie' && frontSide.sideGrade === 'valkyrie' && roofGrade === 'velvet';
-
-      if (isVelvetVelvetRoofVelvet) {
-        filmTotal = 750000;
-        items.push({ label: '전·측면 벨벳 + 루프 벨벳 패키지', amount: 750000 });
-      } else if (isValkyrieValkyrieRoofVelvet) {
-        filmTotal = 850000;
-        items.push({ label: '전·측면 발키리 + 루프 벨벳 패키지', amount: 850000 });
-      } else {
-        if (frontSide) {
-          filmTotal += frontSide.amount;
-          items.push(frontSide);
-        }
-        if (roof) {
-          filmTotal += roof.amount;
-          items.push(roof);
-        }
+      let total = frontSide.amount;
+      if (frontSide.amount > 0) {
+        items.push(frontSide);
       }
 
-      let total = filmTotal;
-      const hasFrontUpgrade = Boolean(frontSide && frontSide.frontGrade !== 'voltage');
+      if (roof) {
+        total += roof.amount;
+        items.push(roof);
+      }
 
       const blackbox = getBlackboxEstimate();
+      let hasBlackbox = false;
       if (blackbox && blackbox.invalid) {
         items.push(blackbox.message);
       } else if (blackbox) {
+        hasBlackbox = true;
         total += blackbox.amount;
         items.push(blackbox);
       }
 
       const ppf = document.getElementById('ppf');
       if (ppf && ppf.checked) {
-        total += 150000;
-        items.push({ label: 'PPF 생활보호 3종', amount: 150000 });
+        total += manWon(15);
+        items.push({ label: 'PPF 생활보호 3종', amount: manWon(15) });
       }
 
       const hipass = document.getElementById('hipass');
       if (hipass && hipass.checked) {
-        if (hasFrontUpgrade && !areSideFilmsAllVoltage()) {
-          items.push({ label: '하이패스 매립 추가 시공', amount: 0 });
-        } else {
-          total += 20000;
-          items.push({ label: '하이패스 매립 추가 시공', amount: 20000 });
-        }
+        const hipassAmount = manWon(frontSide.hipassMan);
+        total += hipassAmount;
+        items.push({ label: '하이패스 매립 추가 시공', amount: hipassAmount });
       }
+
+      const reservationDeposit = getReservationDeposit(frontSide, Boolean(roof), hasBlackbox);
+      const serviceCenterPayment = Math.max(total - reservationDeposit, 0);
 
       return {
         total,
+        reservationDeposit,
+        serviceCenterPayment,
         items: items.length ? items : ['선택된 내역이 없습니다.'],
-        naverPayRequired: total > 0
+        naverPayRequired: reservationDeposit > 0
       };
     }
 
@@ -2923,10 +2925,13 @@
       });
 
       if (estimatedTotalInput) estimatedTotalInput.value = String(estimate.total);
-      const reservationDeposit = getReservationDepositAmount(estimate.invalid);
+      const reservationDeposit = estimate.reservationDeposit || 0;
+      const serviceCenterPayment = estimate.serviceCenterPayment || 0;
       const paymentRequired = reservationDeposit > 0;
       if (reservationDepositAmount) reservationDepositAmount.textContent = formatWon(reservationDeposit);
       if (reservationDepositInput) reservationDepositInput.value = String(reservationDeposit);
+      if (serviceCenterPaymentAmount) serviceCenterPaymentAmount.textContent = formatWon(serviceCenterPayment);
+      if (serviceCenterPaymentInput) serviceCenterPaymentInput.value = String(serviceCenterPayment);
       if (naverPayRequiredInput) {
         if (estimate.invalid) {
           naverPayRequiredInput.value = '선택 오류';
@@ -2939,9 +2944,11 @@
         if (estimate.invalid) {
           priceEstimateNote.textContent = '선택할 수 없는 필름 조합입니다. 전면 또는 측면 필름을 변경해주세요.';
         } else if (paymentRequired) {
-          priceEstimateNote.textContent = `네이버페이 예약금 ${formatWon(reservationDeposit)} 결제가 필요한 선택입니다. 예약금은 예상가격에 합산되지 않으며, 잔여 비용은 대리점에서 결제가 진행됩니다.`;
+          priceEstimateNote.textContent = `예약금 ${formatWon(reservationDeposit)}은 결제 링크에서, 시공점 결제금 ${formatWon(serviceCenterPayment)}은 시공점에서 별도로 결제합니다.`;
+        } else if (serviceCenterPayment > 0) {
+          priceEstimateNote.textContent = `예약금 결제 없이 시공점에서 ${formatWon(serviceCenterPayment)}을 결제합니다.`;
         } else {
-          priceEstimateNote.textContent = '전체 볼티지 기본작업은 네이버페이 예약금 결제가 필요하지 않습니다.';
+          priceEstimateNote.textContent = '전체 볼티지 기본작업은 예약금과 시공점 결제금이 없습니다.';
         }
       }
     }
@@ -3491,7 +3498,8 @@
 
       const serviceCenterName = getInputValue('serviceCenter');
       const serviceCenter = serviceCenterDetailMap[serviceCenterName] || {};
-      const paymentRequired = isReservationPaymentRequired();
+      const reservationDeposit = Number(getInputValue('reservationDeposit')) || 0;
+      const paymentRequired = reservationDeposit > 0;
 
       return {
         submissionId: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
@@ -3524,6 +3532,8 @@
         estimatedTotalLabel: priceEstimateTotal ? priceEstimateTotal.textContent.trim() : '',
         reservationDeposit: getInputValue('reservationDeposit'),
         reservationDepositLabel: reservationDepositAmount ? reservationDepositAmount.textContent.trim() : '',
+        serviceCenterPayment: getInputValue('serviceCenterPayment'),
+        serviceCenterPaymentLabel: serviceCenterPaymentAmount ? serviceCenterPaymentAmount.textContent.trim() : '',
         estimatedItems: getEstimateItemsText(),
         naverPayRequired: paymentRequired ? '필요' : '불필요',
         paymentUrl: paymentRequired ? RESERVATION_PAYMENT_URL : '',
@@ -3569,6 +3579,9 @@
         appendResultText(resultContainer, `주소 : ${payload.serviceCenterAddress || '-'}`);
       }
       appendResultText(resultContainer, '궁금하신 사항은 031-921-1210 로 연락 부탁드립니다.');
+      appendResultText(resultContainer, `결제금 : ${payload.estimatedTotalLabel || '-'}`);
+      appendResultText(resultContainer, `예약금 : ${payload.reservationDepositLabel || '-'}`);
+      appendResultText(resultContainer, `시공점 결제금 : ${payload.serviceCenterPaymentLabel || '-'}`);
 
       if (submitResult) {
         submitResult.innerHTML = '';
@@ -3578,7 +3591,12 @@
         successModal.hidden = false;
         const actionButton = successModal.querySelector('.success-modal-confirm');
         const closeButton = successModal.querySelector('[data-success-modal-close]');
-        if (actionButton) actionButton.focus();
+        const paymentRequired = Number(payload.reservationDeposit) > 0;
+        if (actionButton) {
+          actionButton.hidden = !paymentRequired;
+          actionButton.href = RESERVATION_PAYMENT_URL;
+        }
+        if (actionButton && paymentRequired) actionButton.focus();
         else if (closeButton) closeButton.focus();
       } else if (submitResult) {
         submitResult.classList.add('is-visible');
