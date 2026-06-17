@@ -2821,8 +2821,8 @@
       if (isInvalid || !frontSide || frontSide.invalid) return 0;
 
       let depositMan = frontSide.depositMan;
-      if (hasRoof && frontSide.depositMan < 5) {
-        depositMan += 3;
+      if (hasRoof) {
+        depositMan = Math.max(depositMan, 3);
       }
 
       return manWon(depositMan);
