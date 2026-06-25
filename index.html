@@ -1990,23 +1990,17 @@
 <body>
   <header class="topbar" aria-label="상단 내비게이션">
     <div class="topbar-inner">
-      <a class="brand" href="#top" aria-label="처음으로 이동"><span class="mark" aria-hidden="true"><img src="https://smith.speedgabia.com/logo_data/vibe_sim.png" alt=""></span><span>Polestar Tinting</span></a>
-      <nav class="nav-meta" aria-label="빠른 링크">
-        <span>POLSTAR</span>
-        <a href="tel:031-921-1210">031-921-1210</a>
-      </nav>
+      <a class="brand" href="#top" aria-label="처음으로 이동"><span class="mark" aria-hidden="true"><img src="https://smith.speedgabia.com/logo_data/vibe_sim.png" alt=""></span><span>Polestar BlackBox Setup</span></a>
     </div>
   </header>
 
   <section class="hero" id="top">
     <div class="hero-inner">
       <div>
-        <p class="eyebrow">Upgrade Promotion</p>
-        <h1>폴스타 틴팅<br>예약 신청</h1>
-        <p class="hero-copy">원하시는 옵션 및 대리점을 선택하여주세요.<br>기타 문의는 전화문의 버튼을 클릭해주세요.</p>
+        <h1>폴스타 블랙박스<br>설치 신청</h1>
+        <p class="hero-copy">원하시는 대리점을 선택하여 블랙박스를 설치하여 주세요.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#reservation">예약 정보 입력</a>
-          <a class="btn btn-ghost" href="tel:031-921-1210">전화문의</a>
         </div>
       </div>
     </div>
@@ -2055,11 +2049,6 @@
               </span>
             </label>
           </div>
-          <div class="price-guide" aria-live="polite">
-            <button class="price-guide-btn" id="priceGuideButton" type="button">폴스타4 업그레이드 안내 가격표 확인하기 (클릭)</button>
-            <button class="price-guide-btn" id="filmSpecGuideButton" type="button">바이브나인 필름 상세스팩 확인하기 (클릭)</button>
-            <div class="price-guide-panel" id="priceGuidePanel" aria-label="업그레이드 안내 가격표"></div>
-          </div>
         </div>
       </div>
     </section>
@@ -2069,8 +2058,8 @@
         <div class="form-copy">
           <p class="section-kicker">Reservation Form</p>
           <h2 class="section-title">정보를 입력하여주세요.</h2>
-          <p class="section-copy">폴스타 차량 전용 틴팅 예약을 간편하게 신청해 주세요.<br>전문 상담 후 일정과 시공 내용을 안내드립니다.</p>
-          <div class="notice"><span class="notice-emphasis">원활한 시공 예약을 위해 최소 3일 전 접수 부탁드립니다.</span></div>
+          <p class="section-copy">폴스타 차량 전용 블랙박스를 간편하게 신청해 주세요.</p>
+          <div class="notice"><span class="notice-emphasis">차량 인도 후 1개월 이내 반드시 접수하여 주셔야 합니다.</span></div>
         </div>
 
         <div class="form-card">
@@ -2091,26 +2080,11 @@
                 <input id="phone" name="phone" type="tel" inputmode="numeric" pattern="010-[0-9]{4}-[0-9]{4}" maxlength="13" placeholder="010-0000-0000" autocomplete="tel" required>
               </div>
 
-              <div class="field">
-                <label for="deliveryDateTime">인도일자와 시간을 선택하여 주세요. <span class="req">*</span></label>
-                <input id="deliveryDateTime" name="deliveryDateTime" type="datetime-local" required>
+              <div class="field full">
+                <label for="deliveryDateTime">인도일자를 선택하여 주세요. <span class="req">*</span></label>
+                <input id="deliveryDateTime" name="deliveryDateTime" type="date" required>
                 <input id="deliveryDate" name="deliveryDate" type="hidden">
                 <input id="deliveryTime" name="deliveryTime" type="hidden">
-              </div>
-
-              <div class="field">
-                <label for="deliveryShowroom">인도 전시장을 선택하여 주세요. <span class="req">*</span></label>
-                <select id="deliveryShowroom" name="deliveryShowroom" required>
-                  <option value="" selected disabled>선택해주세요</option>
-                  <option>하남</option>
-                  <option>서울</option>
-                  <option>대전</option>
-                  <option>부산</option>
-                  <option>제주</option>
-                  <option>수원</option>
-                  <option>대구</option>
-                  <option>광주</option>
-                </select>
               </div>
 
               <div class="field full">
@@ -2136,131 +2110,16 @@
                 <input id="centerInTime" name="centerInTime" type="hidden">
               </div>
 
-              <div class="field">
-                <label for="frontFilm">전면 필름 및 농도를 선택하여 주세요.</label>
-                <select id="frontFilm" name="frontFilm">
-                  <option value="" selected>선택해주세요</option>
-                  <option>발키리 15% । 업그레이드 필름</option>
-                  <option>발키리 30% । 업그레이드 필름</option>
-                  <option>벨벳 15% । 업그레이드 필름</option>
-                  <option>벨벳 30% । 업그레이드 필름</option>
-                  <option>벨벳 40% । 업그레이드 필름</option>
-                  <option>볼티지 15% । 기본 필름</option>
-                  <option>볼티지 35% । 기본 필름</option>
-                  <option>볼티지 45% । 기본 필름</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="sideOneFilm">측면 (1열) 필름 및 농도를 선택하여 주세요. <span class="req">*</span></label>
-                <select id="sideOneFilm" name="sideOneFilm" required>
-                  <option value="" selected disabled>선택해주세요</option>
-                  <option>발키리 5% । 업그레이드 필름</option>
-                  <option>발키리 15% । 업그레이드 필름</option>
-                  <option>발키리 30% । 업그레이드 필름</option>
-                  <option>벨벳 5% । 업그레이드 필름</option>
-                  <option>벨벳 15% । 업그레이드 필름</option>
-                  <option>벨벳 30% । 업그레이드 필름</option>
-                  <option>벨벳 40% । 업그레이드 필름</option>
-                  <option>볼티지 5% । 기본 필름</option>
-                  <option>볼티지 15% । 기본 필름</option>
-                  <option>볼티지 35% । 기본 필름</option>
-                  <option>볼티지 45% । 기본 필름</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="sideTwoFilm">측면 (2열) 필름 및 농도를 선택하여 주세요.</label>
-                <select id="sideTwoFilm" name="sideTwoFilm">
-                  <option value="" selected>선택해주세요</option>
-                  <option>발키리 5% । 업그레이드 필름</option>
-                  <option>발키리 15% । 업그레이드 필름</option>
-                  <option>발키리 30% । 업그레이드 필름</option>
-                  <option>벨벳 5% । 업그레이드 필름</option>
-                  <option>벨벳 15% । 업그레이드 필름</option>
-                  <option>벨벳 30% । 업그레이드 필름</option>
-                  <option>벨벳 40% । 업그레이드 필름</option>
-                  <option>볼티지 5% । 기본 필름</option>
-                  <option>볼티지 15% । 기본 필름</option>
-                  <option>볼티지 35% । 기본 필름</option>
-                  <option>볼티지 45% । 기본 필름</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="glassRoofFilm">글라스루프 필름 및 농도를 선택하여 주세요.</label>
-                <select id="glassRoofFilm" name="glassRoofFilm">
-                  <option selected>선택하지 않음</option>
-                  <option>벨벳 5% । 업그레이드 필름</option>
-                  <option>벨벳 15% । 업그레이드 필름</option>
-                  <option>벨벳 30% । 업그레이드 필름</option>
-                  <option>벨벳 40% । 업그레이드 필름</option>
-                  <option>볼티지 5% । 기본 필름</option>
-                  <option>볼티지 15% । 기본 필름</option>
-                  <option>볼티지 35% । 기본 필름</option>
-                  <option>볼티지 45% । 기본 필름</option>
-                </select>
+              <div class="field full">
+                <label for="vehicleVin">차량의 차대번호 전체를 기입하여 주세요. <span class="req">*</span></label>
+                <input id="vehicleVin" name="vehicleVin" type="text" required>
+                <p class="field-message is-visible">정확하게 입력하여 주셔야 정상적인 시공이 가능합니다.</p>
               </div>
 
               <div class="field full">
-                <div class="rear-film-row">
-                  <div class="field is-disabled" id="rearFilmField">
-                    <label for="rearFilm">후면 유리 필름 및 농도를 선택하여 주세요.</label>
-                    <select id="rearFilm" name="rearFilm" disabled>
-                      <option value="" selected>선택하신 차량은 후면 유리가 없습니다.</option>
-                      <option>발키리 15% । 업그레이드 필름</option>
-                      <option>발키리 30% । 업그레이드 필름</option>
-                      <option>벨벳 5% । 업그레이드 필름</option>
-                      <option>벨벳 15% । 업그레이드 필름</option>
-                      <option>벨벳 30% । 업그레이드 필름</option>
-                      <option>벨벳 40% । 업그레이드 필름</option>
-                      <option>볼티지 5% । 기본 필름</option>
-                      <option>볼티지 15% । 기본 필름</option>
-                      <option>볼티지 35% । 기본 필름</option>
-                      <option>볼티지 45% । 기본 필름</option>
-                    </select>
-                  </div>
-                  <p class="film-valkyrie-warning" id="valkyrieWarning">반사필름의 특성상 일부 환경에서는 수신율 저하가 발생할 수 있습니다.</p>
-                </div>
-              </div>
-
-              <div class="field full">
-                <div class="check-row">
-                  <input id="blackbox" name="blackbox" type="checkbox" value="true">
-                  <label for="blackbox">순정 블랙박스 장착</label>
-                </div>
-                <div class="check-row">
-                  <input id="ppf" name="ppf" type="checkbox" value="true">
-                  <label for="ppf">PPF 생활보호 3종 옵션 선택 (추가금 15만원)</label>
-                </div>
-                <div class="ppf-preview" id="ppfPreview" hidden>
-                  <img src="https://smith.speedgabia.com/dummy/PS4_ppf.jpg" alt="폴스타4 PPF 생활보호 3종 안내" loading="lazy">
-                </div>
-              </div>
-
-              <div class="field full">
-                <label for="memo">기타 문의사항을 입력하여 주세요.</label>
-                <textarea id="memo" name="memo" placeholder="기타 문의사항을 입력하여 주세요."></textarea>
-                <div class="price-estimate" id="priceEstimate" aria-live="polite">
-                  <div class="price-estimate-head">
-                    <span class="price-estimate-label">결제금</span>
-                    <strong class="price-estimate-total" id="priceEstimateTotal">0원</strong>
-                  </div>
-                  <div class="price-estimate-deposit">
-                    <span class="price-estimate-deposit-label">예약금</span>
-                    <strong class="price-estimate-deposit-value" id="reservationDepositAmount">0원</strong>
-                  </div>
-                  <div class="price-estimate-deposit">
-                    <span class="price-estimate-deposit-label">시공점 결제금</span>
-                    <strong class="price-estimate-deposit-value" id="serviceCenterPaymentAmount">0원</strong>
-                  </div>
-                  <ul class="price-estimate-list" id="priceEstimateList"></ul>
-                  <p class="price-estimate-note" id="priceEstimateNote">예약금은 결제 링크에서, 시공점 결제금은 시공점에서 별도로 결제가 진행됩니다.</p>
-                  <input id="estimatedTotal" name="estimatedTotal" type="hidden" value="0">
-                  <input id="reservationDeposit" name="reservationDeposit" type="hidden" value="0">
-                  <input id="serviceCenterPayment" name="serviceCenterPayment" type="hidden" value="0">
-                  <input id="naverPayRequired" name="naverPayRequired" type="hidden" value="불필요">
-                </div>
+                <label for="blackboxSerial">블랙박스 시리얼넘버를 기입하여 주세요. <span class="req">*</span></label>
+                <input id="blackboxSerial" name="blackboxSerial" type="text" required>
+                <p class="field-message is-visible">정확하게 입력하여 주셔야 정상적인 시공이 가능합니다.</p>
               </div>
             </div>
 
@@ -2292,11 +2151,10 @@
                 <div class="privacy-detail">
                   <ul>
                     <li>처리자 : 바이브나인</li>
-                    <li>수집·이용 목적 : 폴스타 틴팅 예약 접수, 시공 일정 상담·조율, 고객 안내 및 문의 응대</li>
-                    <li>필수 수집 항목 : 이름, 휴대전화 번호, 차량 모델, 인도 전시장, 시공점, 인도/입고 일정, 선택 시공 옵션</li>
-                    <li>선택 수집 항목 : 기타 문의사항</li>
+                    <li>수집·이용 목적 : 폴스타 블랙박스 설치 접수, 시공 일정 상담·조율, 고객 안내 및 문의 응대</li>
+                    <li>필수 수집 항목 : 이름, 휴대전화 번호, 차량 모델, 시공점, 인도 일자, 입고 일정, 차대번호, 블랙박스 시리얼번호</li>
                     <li>보유 및 이용 기간 : 예약 상담 및 시공 안내 목적 달성 후 파기합니다. 단, 분쟁 대응 및 관계 법령에 따른 보관이 필요한 경우 입력일로부터 최대 5년까지 보관할 수 있습니다.</li>
-                    <li>동의 거부 권리 및 불이익 : 필수 항목 수집·이용에 동의하지 않을 경우 예약 접수 및 시공 안내가 제한됩니다.</li>
+                    <li>동의 거부 권리 및 불이익 : 필수 항목 수집·이용에 동의하지 않을 경우 접수 및 시공 안내가 제한됩니다.</li>
                   </ul>
                 </div>
               </details>
@@ -2312,11 +2170,11 @@
                 </summary>
                 <div class="privacy-detail">
                   <ul>
-                    <li>제공받는 자 : 바이브나인 대리점 및 고객이 선택한 시공점</li>
-                    <li>제공 목적 : 예약 확인, 시공 일정 조율, 시공 관련 고객 안내</li>
-                    <li>제공 항목 : 이름, 휴대전화 번호, 차량 모델, 인도 전시장, 시공점, 인도/입고 일정, 선택 시공 옵션, 기타 문의사항</li>
+                    <li>제공받는 자 : 바이브나인 대리점 및 고객이 선택한 시공점, 소낙스</li>
+                    <li>제공 목적 : 접수 확인, 시공 일정 조율, 시공 관련 고객 안내</li>
+                    <li>제공 항목 : 이름, 휴대전화 번호, 차량 모델, 시공점, 인도 일자, 입고 일정, 차대번호, 블랙박스 시리얼번호</li>
                     <li>보유 및 이용 기간 : 제공 목적 달성 후 파기합니다. 단, 분쟁 대응을 위해 제공일로부터 최대 2년까지 보관할 수 있습니다.</li>
-                    <li>동의 거부 권리 및 불이익 : 제3자 제공에 동의하지 않을 경우 대리점 및 시공점을 통한 예약 안내가 제한됩니다.</li>
+                    <li>동의 거부 권리 및 불이익 : 제3자 제공에 동의하지 않을 경우 대리점 및 시공점을 통한 안내가 제한됩니다.</li>
                   </ul>
                 </div>
               </details>
@@ -2370,8 +2228,7 @@
   </main>
 
   <nav class="mobile-sticky" aria-label="모바일 빠른 예약">
-    <a class="call" href="tel:031-921-1210">전화문의</a>
-    <a class="apply" href="#reservation">예약하기</a>
+    <a class="apply" href="#reservation" style="grid-column: 1 / -1;">예약하기</a>
   </nav>
 
   <div class="toast" id="toast" role="status" aria-live="polite">디자인 시안입니다. 실제 접수 연동은 다음 단계에서 연결하면 됩니다.</div>
@@ -2390,7 +2247,7 @@
 
   <script>
     // Apps Script 웹 앱 배포 URL을 입력하면 구글시트 접수가 활성화됩니다.
-    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfCPmN7RqzN0boA6CuYz1XfSdBiJbeuVx5oyG5iWHPWlryIxmNlp3lNhkYKJFjnNuCzQ/exec';
+    const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzxS0ByIp5D9xueXADLnOwB8a5kNpN5dJr5Ew4W4Sx9fON0Hc2rxEuR78eJfbBO8dkv/exec';
     const RESERVATION_PAYMENT_URL = 'https://smartstore.naver.com/smithclubmall/products/8130313777';
     const form = document.getElementById('reservationForm');
     const toast = document.getElementById('toast');
@@ -3512,8 +3369,6 @@
         vehicleModel: getSelectedVehicleModel(),
         deliveryDateTime: getInputValue('deliveryDateTime'),
         deliveryDate: getInputValue('deliveryDate'),
-        deliveryTime: getInputValue('deliveryTime'),
-        deliveryShowroom: getInputValue('deliveryShowroom'),
         serviceCenter: serviceCenterName,
         serviceCenterPhone: serviceCenter.phone || getInputValue('serviceCenterPhone'),
         serviceCenterAddress: serviceCenter.address || getInputValue('serviceCenterAddress'),
@@ -3521,25 +3376,8 @@
         centerInDateTime: getInputValue('centerInDateTime'),
         centerInDate: getInputValue('centerInDate'),
         centerInTime: getInputValue('centerInTime'),
-        frontFilm: getInputValue('frontFilm'),
-        sideOneFilm: getInputValue('sideOneFilm'),
-        sideTwoFilm: getInputValue('sideTwoFilm'),
-        rearFilm: rearFilmInput && !rearFilmInput.disabled ? rearFilmInput.value : '선택하신 차량은 후면 유리가 없습니다.',
-        glassRoofFilm: getInputValue('glassRoofFilm'),
-        blackbox: getCheckboxValue('blackbox'),
-        blackboxChannel: blackboxInput && blackboxInput.checked ? getBlackboxOptionLabel() : '',
-        ppf: getCheckboxValue('ppf'),
-        hipass: blackboxInput && blackboxInput.checked ? '예' : '아니오',
-        memo: getInputValue('memo'),
-        estimatedTotal: getInputValue('estimatedTotal'),
-        estimatedTotalLabel: priceEstimateTotal ? priceEstimateTotal.textContent.trim() : '',
-        reservationDeposit: getInputValue('reservationDeposit'),
-        reservationDepositLabel: reservationDepositAmount ? reservationDepositAmount.textContent.trim() : '',
-        serviceCenterPayment: getInputValue('serviceCenterPayment'),
-        serviceCenterPaymentLabel: serviceCenterPaymentAmount ? serviceCenterPaymentAmount.textContent.trim() : '',
-        estimatedItems: getEstimateItemsText(),
-        naverPayRequired: paymentRequired ? '필요' : '불필요',
-        paymentUrl: paymentRequired ? RESERVATION_PAYMENT_URL : '',
+        vehicleVin: getInputValue('vehicleVin'),
+        blackboxSerial: getInputValue('blackboxSerial'),
         privacyConsent: getCheckboxValue('privacy'),
         thirdPartyConsent: getCheckboxValue('thirdPartyConsent'),
         marketingConsent: getCheckboxValue('marketingConsent'),
@@ -3573,18 +3411,7 @@
       const resultContainer = successModalBody || submitResult;
       if (!resultContainer) return;
       resultContainer.innerHTML = '';
-      appendResultText(resultContainer, '접수 완료되었습니다.', true);
-      appendResultText(resultContainer, `지정하신 대리점은 ${payload.serviceCenter || '-'} 입니다.`);
-      appendResultText(resultContainer, `연락처 : ${payload.serviceCenterPhone || '-'}`);
-      if (payload.serviceCenterMapUrl && payload.serviceCenterAddress) {
-        appendResultLink(resultContainer, '주소 : ', payload.serviceCenterMapUrl, payload.serviceCenterAddress);
-      } else {
-        appendResultText(resultContainer, `주소 : ${payload.serviceCenterAddress || '-'}`);
-      }
-      appendResultText(resultContainer, '궁금하신 사항은 031-921-1210 로 연락 부탁드립니다.');
-      appendResultText(resultContainer, `결제금 : ${payload.estimatedTotalLabel || '-'}`);
-      appendResultText(resultContainer, `예약금 : ${payload.reservationDepositLabel || '-'}`);
-      appendResultText(resultContainer, `시공점 결제금 : ${payload.serviceCenterPaymentLabel || '-'}`);
+      appendResultText(resultContainer, '정상 처리되었습니다. 감사합니다.', true);
 
       if (submitResult) {
         submitResult.innerHTML = '';
@@ -3594,13 +3421,8 @@
         successModal.hidden = false;
         const actionButton = successModal.querySelector('.success-modal-confirm');
         const closeButton = successModal.querySelector('[data-success-modal-close]');
-        const paymentRequired = Number(payload.reservationDeposit) > 0;
-        if (actionButton) {
-          actionButton.hidden = !paymentRequired;
-          actionButton.href = RESERVATION_PAYMENT_URL;
-        }
-        if (actionButton && paymentRequired) actionButton.focus();
-        else if (closeButton) closeButton.focus();
+        if (actionButton) actionButton.hidden = true;
+        if (closeButton) closeButton.focus();
       } else if (submitResult) {
         submitResult.classList.add('is-visible');
         submitResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -3712,7 +3534,9 @@
         syncDateTimeFields();
         updateDateTimeValidity(sourceInput);
       });
-      createDateTimePicker(sourceInput);
+      if (source !== 'deliveryDateTime') {
+        createDateTimePicker(sourceInput);
+      }
     });
 
     if (mobileSticky && reservationSection && 'IntersectionObserver' in window) {
@@ -3746,8 +3570,6 @@
       updatePhoneValidity();
       syncDateTimeFields();
       updateServiceCenterValidity();
-      updateFilmSelectionValidity();
-      updateBlackboxOptionState();
       dateTimePairs.forEach(({ source }) => updateDateTimeValidity(document.getElementById(source)));
       if (!form.reportValidity()) return;
 
