@@ -2131,6 +2131,16 @@
               </div>
 
               <div class="field full">
+                <label for="voucherNumber">바우처 번호를 입력하여 주세요. <span class="req">*</span></label>
+                <button class="serial-guide-btn" type="button" id="voucherGuideBtn">바우처 번호 확인하는 방법 <span class="serial-guide-arrow">▼</span></button>
+                <div class="serial-guide-panel" id="voucherGuidePanel" hidden>
+                  <img src="assets/voucher-serial-guide.jpg" alt="바우처 번호 확인 방법 안내" loading="lazy">
+                </div>
+                <input id="voucherNumber" name="voucherNumber" type="text" required>
+                <p class="field-message is-visible">정확하게 입력하여 주셔야 정상적인 시공이 가능합니다.</p>
+              </div>
+
+              <div class="field full">
                 <label for="vehicleVin">차량의 차대번호 전체를 기입하여 주세요. <span class="req">*</span></label>
                 <input id="vehicleVin" name="vehicleVin" type="text" required>
                 <p class="field-message is-visible">정확하게 입력하여 주셔야 정상적인 시공이 가능합니다.</p>
@@ -2546,6 +2556,16 @@
         const isOpen = !serialGuidePanel.hidden;
         serialGuidePanel.hidden = isOpen;
         serialGuideBtn.classList.toggle('is-open', !isOpen);
+      });
+    }
+
+    const voucherGuideBtn = document.getElementById('voucherGuideBtn');
+    const voucherGuidePanel = document.getElementById('voucherGuidePanel');
+    if (voucherGuideBtn && voucherGuidePanel) {
+      voucherGuideBtn.addEventListener('click', () => {
+        const isOpen = !voucherGuidePanel.hidden;
+        voucherGuidePanel.hidden = isOpen;
+        voucherGuideBtn.classList.toggle('is-open', !isOpen);
       });
     }
 
@@ -3412,6 +3432,7 @@
         centerInDateTime: getInputValue('centerInDateTime'),
         centerInDate: getInputValue('centerInDate'),
         centerInTime: getInputValue('centerInTime'),
+        voucherNumber: getInputValue('voucherNumber'),
         vehicleVin: getInputValue('vehicleVin'),
         blackboxSerial: getInputValue('blackboxSerial'),
         privacyConsent: getCheckboxValue('privacy'),

@@ -1,0 +1,134 @@
+/**
+ * 폴스타 블랙박스 설치 신청 - Google Apps Script
+ *
+ * [배포 방법]
+ * 1. 구글 스프레드시트 상단 메뉴 → 확장 프로그램 → Apps Script 클릭
+ * 2. 아래 코드 전체를 붙여넣기
+ * 3. 저장 후 우측 상단 [배포] → [새 배포] 클릭
+ * 4. 유형: 웹 앱 선택
+ *    - 설명: 폴스타 블랙박스 신청 접수
+ *    - 실행 계정: 나(본인 구글 계정)
+ *    - 액세스 권한: 모든 사용자
+ * 5. [배포] 클릭 후 생성된 웹 앱 URL을 복사
+ * 6. index.html 상단 GOOGLE_APPS_SCRIPT_URL 변수에 해당 URL 붙여넣기
+ *
+ * [주의]
+ * - 코드 수정 시 반드시 [새 버전으로 배포] 해야 반영됩니다.
+ * - 기존 배포를 수정/저장만 하면 반영되지 않습니다.
+ */
+
+// ─── 설정 ───────────────────────────────────────────────────────────────────
+
+const SPREADSHEET_ID = '10RqV8Tzjl9_P4StXkw1iwlbtlKupxY2ca60jgHKT1g8';
+const SHEET_NAME = '접수목록';
+
+const HEADERS = [
+  '접수번호',
+  '접수시간 (KST)',
+  '계약자명',
+  '전화번호',
+  '차종',
+  '인도일자',
+  '시공점',
+  '시공점 전화',
+  '시공점 주소',
+  '입고일자',
+  '입고시간',
+  '바우처 번호',
+  '차대번호',
+  '블랙박스 시리얼',
+  '개인정보 수집동의',
+  '제3자 제공동의',
+  '마케팅 수신동의',
+  '페이지 URL',
+];
+
+// ─── 한국시간 (KST = UTC+9) ──────────────────────────────────────────────────
+
+function getKSTTimeString() {
+  const now = new Date();
+  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+  const yyyy = kst.getUTCFullYear();
+  const mm   = String(kst.getUTCMonth() + 1).padStart(2, '0');
+  const dd   = String(kst.getUTCDate()).padStart(2, '0');
+  const hh   = String(kst.getUTCHours()).padStart(2, '0');
+  const min  = String(kst.getUTCMinutes()).padStart(2, '0');
+  const ss   = String(kst.getUTCSeconds()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+}
+
+// ─── 헤더 초기화 ─────────────────────────────────────────────────────────────
+
+function initSheet(sheet) {
+  sheet.appendRow(HEADERS);
+  const headerRange = sheet.getRange(1, 1, 1, HEADERS.length);
+  headerRange.setFontWeight('bold');
+  headerRange.setBackground('#1a1a1a');
+  headerRange.setFontColor('#ffffff');
+  headerRange.setHorizontalAlignment('center');
+  sheet.setFrozenRows(1);
+
+  // 열 너비 자동 조정
+  sheet.autoResizeColumns(1, HEADERS.length);
+}
+
+// ─── GET 요청 처리 (폼 전송 수신) ────────────────────────────────────────────
+
+function doGet(e) {
+  try {
+    const rawPayload = e && e.parameter && e.parameter.payload;
+    if (!rawPayload) {
+      return jsonResponse({ ok: false, error: 'payload 파라미터가 없습니다.' });
+    }
+
+    const data = JSON.parse(decodeURIComponent(rawPayload));
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    let sheet = ss.getSheetByName(SHEET_NAME);
+
+    if (!sheet) {
+      sheet = ss.insertSheet(SHEET_NAME);
+      initSheet(sheet);
+    }
+
+    const row = [
+      data.submissionId             || '',
+      getKSTTimeString(),                         // 서버 기준 KST 접수 시간
+      data.contractor               || '',
+      data.phone                    || '',
+      data.vehicleModel             || '',
+      data.deliveryDate             || data.deliveryDateTime || '',
+      data.serviceCenter            || '',
+      data.serviceCenterPhone       || '',
+      data.serviceCenterAddress     || '',
+      data.centerInDate             || '',
+      data.centerInTime             || '',
+      data.voucherNumber            || '',
+      data.vehicleVin               || '',
+      data.blackboxSerial           || '',
+      data.privacyConsent           || '',
+      data.thirdPartyConsent        || '',
+      data.marketingConsent         || '',
+      data.pageUrl                  || '',
+    ];
+
+    sheet.appendRow(row);
+
+    // 새로 추가된 행 가운데 정렬
+    const lastRow = sheet.getLastRow();
+    sheet.getRange(lastRow, 1, 1, HEADERS.length).setHorizontalAlignment('center');
+
+    return jsonResponse({ ok: true, saved: true });
+
+  } catch (err) {
+    return jsonResponse({ ok: false, error: err.message });
+  }
+}
+
+// ─── JSON 응답 헬퍼 ───────────────────────────────────────────────────────────
+
+function jsonResponse(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
